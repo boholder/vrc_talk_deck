@@ -12,8 +12,8 @@ def parse_args():
 
 
 def bind(client: SimpleUDPClient, address: str):
-    def send(message: str | list | tuple):
-        client.send_message(address, message)
+    def send(*message):
+        client.send_message(address, *message)
 
     return send
 
