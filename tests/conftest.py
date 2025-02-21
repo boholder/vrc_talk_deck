@@ -1,3 +1,4 @@
+import os
 from collections.abc import Callable
 from typing import Any
 
@@ -5,7 +6,7 @@ import pytest
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
 
-DEFAULT_PARAMS = {"ip": "127.0.0.1", "send-port": 9000, "recv-port": 9001}
+DEFAULT_PARAMS = {"ip": "127.0.0.1", "send-port": 9000, "receive-port": 9001}
 
 
 @pytest.fixture
@@ -33,3 +34,9 @@ def test_server(assertion_handler):
         return BlockingOSCUDPServer((DEFAULT_PARAMS["ip"], DEFAULT_PARAMS["send-port"]), dispatcher)
 
     return built_server
+
+
+@pytest.fixture
+def test_files_dir():
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(test_dir, "test_files")

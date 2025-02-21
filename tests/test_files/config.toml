@@ -1,0 +1,7 @@
+ip = "0.0.0.0"
+send_port = 111
+receive_port = 222
+
+[avatar.parameters.test_param]
+type = "Int"
+custom_a = 1
