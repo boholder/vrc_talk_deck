@@ -1,0 +1,19 @@
+[project]
+name = "vrc_talk_deck"
+version = "0.1.0"
+description = "Simple VRChat avatar chatbox appender using OSC"
+authors = [
+    {name = "boholder", email = "bottleholder@anche.no"},
+]
+dependencies = []
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
