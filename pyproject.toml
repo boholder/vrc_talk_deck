@@ -5,7 +5,7 @@ description = "Simple VRChat avatar chatbox appender using OSC"
 authors = [
     {name = "boholder", email = "bottleholder@anche.no"},
 ]
-dependencies = []
+dependencies = ["python-osc>=1.9.3"]
 requires-python = ">=3.12"
 readme = "README.md"
 license = {text = "MIT"}
