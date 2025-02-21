@@ -1,0 +1,17 @@
+ci:
+  autoupdate_schedule: monthly
+repos:
+  # Upgrading the syntax
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.0
+    hooks:
+      - id: pyupgrade
+        args: [ --py311-plus ]
+
+  # Linting, formatting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.7
+    hooks:
+      - id: ruff
+        args: [ --fix, --show-fixes ]
+      - id: ruff-format
