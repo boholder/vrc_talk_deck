@@ -51,6 +51,9 @@ class AvatarParameter(abc.ABC):
     def address(self):
         return f"/avatar/parameters/{self.param_key}"
 
+    def post_configured_init(self):  # noqa: B027
+        pass
+
     def __call__(self, *osc_message) -> Any:
         raise NotImplementedError
 
@@ -60,6 +63,7 @@ def parse_parameter_processor(raw: dict, clazz: type[AvatarParameter]) -> Avatar
     obj = clazz()
     obj.type = ParamType(raw.pop("type"))
     obj.__dict__.update(raw)
+    obj.post_configured_init()
     return obj
 
 
@@ -75,9 +79,7 @@ class GeneralConfig:
                 setattr(self, field_name, config[field_name])
 
 
-def parse_config_file(
-    path: Path, parameter_processor: dict[str, type[AvatarParameter]]
-) -> tuple[GeneralConfig, list[AvatarParameter]]:
+def parse_config_file(path: Path, parameter_processor: dict[str, type[AvatarParameter]]) -> tuple[GeneralConfig, list[AvatarParameter]]:
     with path.open("rb") as f:
         parsed = tomllib.load(f)
     if not parsed:

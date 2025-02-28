@@ -4,6 +4,8 @@ receive_port = 9001
 
 [boholder_talk_deck]
 type = "Int"
-# other than "type", custom data structure for each avatar parameter
 lang = ["zh", "en"]
-response = [{ v = 0, zh = "有哪些事情你一直想做但还没做，为什么？", en = "What are the things that you always wanted to do but haven't yet done? Why not?" }]
+response = [
+    { id = 0, zh = "你好！", en = "Hello!" },
+    { id = 1, zh = "太长了", en = "AAAAABBBBBAAAAABBBBBAAAAABBBBBAAAAABBBBBAAAAABBBBBAAAAABBBBBAAAAABBBBBAAAAABBBBBAAAAABBBBBAAAAABBBBBAAAAABBBBBAAAAABBBBBAAAAABBBBBAAAAABBBBB" }
+]
