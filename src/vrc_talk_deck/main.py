@@ -1,6 +1,7 @@
 import abc
 import argparse
 import dataclasses
+import logging
 import tomllib
 from collections.abc import Callable
 from enum import Enum
@@ -10,6 +11,8 @@ from typing import Any
 from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
 from pythonosc.udp_client import SimpleUDPClient
+
+log = logging.getLogger(__name__)
 
 
 def parse_args():
@@ -30,7 +33,7 @@ def set_chat_box_address(client: SimpleUDPClient):
     return bind_client(client, "/chatbox/input")
 
 
-def bind_server(ip: str, port: int, address_handler_dict: dict[str, Callable[[str, Any], None]]):
+def bind_server(ip: str, port: int, address_handler_dict: dict[str, Callable[[Any], None]]):
     dispatcher = Dispatcher()
     for address, handler in address_handler_dict.items():
         dispatcher.map(address, handler)
@@ -105,6 +108,19 @@ def prepare(
     return {clazz.param_key: clazz for clazz in classes}
 
 
-if __name__ == "__main__":
-    command_args = parse_args()
-    print(command_args)
+def handle_and_send_chat(handler: Callable[[Any], Any], sender: Callable[[Any], None], *message):
+    log.info("receive: %s", message)
+    result = handler(*message)
+    log.info("send: ", result)
+    sender((result, "b", "n"))
+
+
+def build_server(config_path: Path, *processors: type[AvatarParameter]):
+    general_config, parameters = parse_config_file(config_path, prepare(*processors))
+
+    c = SimpleUDPClient(general_config.ip, general_config.send_port)
+    send_to_chat_box = set_chat_box_address(c)
+    address_handler_dict = {_p.address: lambda *msg, p=_p: handle_and_send_chat(p, send_to_chat_box, *msg) for _p in parameters}
+
+    server = bind_server(general_config.ip, general_config.receive_port, address_handler_dict)
+    return server

@@ -4,7 +4,7 @@ from pathlib import Path
 from pythonosc.udp_client import SimpleUDPClient
 
 from tests.conftest import DEFAULT_PARAMS
-from vrc_talk_deck.main import AvatarParameter, ParamType, bind_server, parse_config_file, prepare, set_chat_box_address
+from vrc_talk_deck.main import AvatarParameter, ParamType, bind_server, build_server, parse_config_file, prepare, set_chat_box_address
 
 
 def test_send(test_server):
@@ -66,3 +66,29 @@ def test_avatar_parameter_config_parse(test_files_dir):
 def test_prepare():
     actual = prepare(TestAvatarParameter)
     assert actual["test_param"] == TestAvatarParameter
+
+
+class EchoAvatarParameter(AvatarParameter):
+    param_key = "echo_param"
+    type = ParamType.Float
+
+    def __call__(self, osc_message: float):
+        return osc_message
+
+
+def test_whole_process(test_server, test_files_dir):
+    server_under_test = build_server(Path(os.path.join(test_files_dir, "echo_config.toml")), EchoAvatarParameter)
+    mock_client = SimpleUDPClient(DEFAULT_PARAMS["ip"], DEFAULT_PARAMS["receive-port"])
+    result = False
+    msg = 1.23
+
+    def check(*actual):
+        nonlocal result
+        result = (msg, "b", "n") == actual
+
+    mock_server = test_server({"/chatbox/input": check})
+    mock_client.send_message("/avatar/parameters/echo_param", msg)
+    server_under_test.handle_request()
+    mock_server.handle_request()
+
+    assert result
