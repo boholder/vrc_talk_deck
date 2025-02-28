@@ -51,11 +51,11 @@ class AvatarParameter(abc.ABC):
     def address(self):
         return f"/avatar/parameters/{self.param_key}"
 
-    def __call__(self, *osc_message):
+    def __call__(self, *osc_message) -> Any:
         raise NotImplementedError
 
 
-def parse_parameter(raw: dict, clazz: type[AvatarParameter]) -> AvatarParameter:
+def parse_parameter_processor(raw: dict, clazz: type[AvatarParameter]) -> AvatarParameter:
     """convert raw dict to Parameter object"""
     obj = clazz()
     obj.type = ParamType(raw.pop("type"))
@@ -75,7 +75,9 @@ class GeneralConfig:
                 setattr(self, field_name, config[field_name])
 
 
-def parse_config_file(path: Path, parameter_templates: dict[str, type[AvatarParameter]]) -> tuple[GeneralConfig, list[AvatarParameter]]:
+def parse_config_file(
+    path: Path, parameter_processor: dict[str, type[AvatarParameter]]
+) -> tuple[GeneralConfig, list[AvatarParameter]]:
     with path.open("rb") as f:
         parsed = tomllib.load(f)
     if not parsed:
@@ -86,10 +88,19 @@ def parse_config_file(path: Path, parameter_templates: dict[str, type[AvatarPara
 
     parameters = []
     for param_name, param_config in parsed.items():
-        if param_name in parameter_templates:
-            parameters.append(parse_parameter(param_config, parameter_templates[param_name]))
+        if param_name in parameter_processor:
+            parameters.append(parse_parameter_processor(param_config, parameter_processor[param_name]))
 
     return config, parameters
+
+
+def prepare(
+    *classes: type[AvatarParameter],
+) -> dict[
+    str,
+    type[AvatarParameter],
+]:
+    return {clazz.param_key: clazz for clazz in classes}
 
 
 if __name__ == "__main__":
