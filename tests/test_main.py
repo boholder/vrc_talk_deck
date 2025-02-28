@@ -3,12 +3,12 @@ from pathlib import Path
 
 from pythonosc.udp_client import SimpleUDPClient
 
-from tests.conftest import DEFAULT_PARAMS
+from tests.conftest import DEFAULT_IP
 from vrc_talk_deck.main import AvatarParameter, ParamType, bind_server, build_server, parse_config_file, prepare, set_chat_box_address
 
 
-def test_send(test_server):
-    c = SimpleUDPClient(DEFAULT_PARAMS["ip"], DEFAULT_PARAMS["send-port"])
+def test_send(test_server, random_port_pair):
+    c = SimpleUDPClient(DEFAULT_IP, random_port_pair.send)
     send_to_chat_box = set_chat_box_address(c)
     msg = ("hello", True)
     result = False
@@ -17,14 +17,14 @@ def test_send(test_server):
         nonlocal result
         result = msg == actual
 
-    server = test_server({"/chatbox/input": check})
+    server = test_server({"/chatbox/input": check}, random_port_pair.send)
     send_to_chat_box(msg)
     server.handle_request()
     assert result
 
 
-def test_bind_server():
-    c = SimpleUDPClient(DEFAULT_PARAMS["ip"], DEFAULT_PARAMS["send-port"])
+def test_bind_server(random_port_pair):
+    c = SimpleUDPClient(DEFAULT_IP, random_port_pair.send)
     send_to_chat_box = set_chat_box_address(c)
     msg = ("hello", "b", "n")
     result = False
@@ -33,7 +33,7 @@ def test_bind_server():
         nonlocal result
         result = msg == actual
 
-    server = bind_server(DEFAULT_PARAMS["ip"], DEFAULT_PARAMS["send-port"], {"/chatbox/input": assertion})
+    server = bind_server(DEFAULT_IP, random_port_pair.send, {"/chatbox/input": assertion})
     send_to_chat_box(msg)
     server.handle_request()
     assert result
@@ -78,18 +78,16 @@ class EchoAvatarParameter(AvatarParameter):
 
 def test_whole_process(test_server, test_files_dir):
     server_under_test = build_server(Path(os.path.join(test_files_dir, "echo_config.toml")), EchoAvatarParameter)
-    mock_client = SimpleUDPClient(DEFAULT_PARAMS["ip"], DEFAULT_PARAMS["receive-port"])
+    mock_client = SimpleUDPClient(DEFAULT_IP, 9001)
     result = False
-    msg = 1.23
+    msg = 999
 
     def check(*actual):
         nonlocal result
-        result = (msg, "b", "n") == actual
+        result = (msg, True) == actual
 
-    mock_server = test_server({"/chatbox/input": check}, DEFAULT_PARAMS["send-port"])
-    mock_server.timeout = 10
-
+    mock_server = test_server({"/chatbox/input": check}, 9000)
     mock_client.send_message("/avatar/parameters/echo_param", msg)
     server_under_test.handle_request()
-    mock_server.handle_timeout()
+    mock_server.handle_request()
     assert result

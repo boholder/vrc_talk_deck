@@ -13,6 +13,7 @@ from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
 from pythonosc.udp_client import SimpleUDPClient
 
+logging.level = logging.INFO
 log = logging.getLogger(__name__)
 
 
@@ -111,7 +112,8 @@ def prepare(
 
 def handle_and_send_chat(handler: Callable[[Any], Any], sender: Callable[[Any], None], *message):
     log.info("receive: %s", message)
-    result = handler(*message)
+    # remove first address param
+    result = handler(*message[1:])
     log.info("send: ", result)
     # True: send the text immediately, bypassing the keyboard
     # ref: https://docs.vrchat.com/docs/osc-as-input-controller#chatbox

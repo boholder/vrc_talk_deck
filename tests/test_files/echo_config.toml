@@ -3,4 +3,4 @@ send_port = 9000
 receive_port = 9001
 
 [echo_param]
-type = "Float"
+type = "Int"
