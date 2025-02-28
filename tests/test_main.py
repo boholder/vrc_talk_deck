@@ -10,7 +10,7 @@ from vrc_talk_deck.main import AvatarParameter, ParamType, bind_server, build_se
 def test_send(test_server):
     c = SimpleUDPClient(DEFAULT_PARAMS["ip"], DEFAULT_PARAMS["send-port"])
     send_to_chat_box = set_chat_box_address(c)
-    msg = ("hello", "b", "n")
+    msg = ("hello", True)
     result = False
 
     def check(*actual):

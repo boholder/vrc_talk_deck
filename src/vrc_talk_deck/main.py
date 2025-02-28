@@ -1,6 +1,7 @@
 import abc
 import argparse
 import dataclasses
+import functools
 import logging
 import tomllib
 from collections.abc import Callable
@@ -112,7 +113,9 @@ def handle_and_send_chat(handler: Callable[[Any], Any], sender: Callable[[Any], 
     log.info("receive: %s", message)
     result = handler(*message)
     log.info("send: ", result)
-    sender((result, "b", "n"))
+    # True: send the text immediately, bypassing the keyboard
+    # ref: https://docs.vrchat.com/docs/osc-as-input-controller#chatbox
+    sender((result, True))
 
 
 def build_server(config_path: Path, *processors: type[AvatarParameter]):
@@ -120,7 +123,7 @@ def build_server(config_path: Path, *processors: type[AvatarParameter]):
 
     c = SimpleUDPClient(general_config.ip, general_config.send_port)
     send_to_chat_box = set_chat_box_address(c)
-    address_handler_dict = {_p.address: lambda *msg, p=_p: handle_and_send_chat(p, send_to_chat_box, *msg) for _p in parameters}
+    address_handler_dict = {p.address: functools.partial(handle_and_send_chat, p, send_to_chat_box) for p in parameters}
 
     server = bind_server(general_config.ip, general_config.receive_port, address_handler_dict)
     return server
