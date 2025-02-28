@@ -129,3 +129,15 @@ def build_server(config_path: Path, *processors: type[AvatarParameter]):
 
     server = bind_server(general_config.ip, general_config.receive_port, address_handler_dict)
     return server
+
+
+def log_vrc_osc_messages():
+    """For receiving real vrc osc messages"""
+
+    def log_message(*msg):
+        print(msg)
+
+    dispatcher = Dispatcher()
+    dispatcher.set_default_handler(log_message)
+    server = BlockingOSCUDPServer(("127.0.0.1", 9001), dispatcher)
+    server.serve_forever()
