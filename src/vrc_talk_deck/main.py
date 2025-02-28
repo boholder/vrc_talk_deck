@@ -69,19 +69,20 @@ class GeneralConfig:
     send_port: int = 9000
     receive_port: int = 9001
 
+    def update(self, config: dict):
+        for field_name, field_value in vars(GeneralConfig).items():
+            if field_name in config and type(config[field_name]) is type(field_value):
+                setattr(self, field_name, config[field_name])
 
-def parse_config_file(
-    path: Path, parameter_templates: dict[str, type[AvatarParameter]]
-) -> tuple[GeneralConfig, list[AvatarParameter]]:
+
+def parse_config_file(path: Path, parameter_templates: dict[str, type[AvatarParameter]]) -> tuple[GeneralConfig, list[AvatarParameter]]:
     with path.open("rb") as f:
         parsed = tomllib.load(f)
     if not parsed:
         raise ValueError("config file is empty")
 
     config = GeneralConfig()
-    for field_name, field_value in vars(GeneralConfig).items():
-        if field_name in parsed and type(parsed[field_name]) is type(field_value):
-            setattr(config, field_name, parsed[field_name])
+    config.update(parsed)
 
     parameters = []
     for param_name, param_config in parsed.items():

@@ -15,7 +15,7 @@ requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.ruff]
-line-length = 120
+line-length = 160
 target-version = "py312"
 src = ["src", "tests"]
 

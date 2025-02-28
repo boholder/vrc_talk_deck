@@ -55,9 +55,7 @@ def test_avatar_parameter_config_parse(test_files_dir):
             assert self.type is ParamType.Int
             assert self.custom_a == 1
 
-    _, p_list = parse_config_file(
-        Path(os.path.join(test_files_dir, "config.toml")), {"test_param": TestAvatarParameter}
-    )
+    _, p_list = parse_config_file(Path(os.path.join(test_files_dir, "config.toml")), {"test_param": TestAvatarParameter})
 
     assert len(p_list) == 1
     assert type(p_list[0]) is TestAvatarParameter
