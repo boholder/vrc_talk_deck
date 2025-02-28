@@ -43,23 +43,24 @@ class ParamType(Enum):
     Float = "Float"
 
 
-@dataclasses.dataclass
 class AvatarParameter(abc.ABC):
-    name: str
+    param_key: str
     type: ParamType
-    config: dict
 
     @property
     def address(self):
-        return f"/avatar/parameters/{self.name}"
+        return f"/avatar/parameters/{self.param_key}"
 
     def __call__(self, *osc_message):
         raise NotImplementedError
 
 
-def pick_parameter(raw: dict):
+def parse_parameter(raw: dict, clazz: type[AvatarParameter]) -> AvatarParameter:
     """convert raw dict to Parameter object"""
-    pass
+    obj = clazz()
+    obj.type = ParamType(raw.pop("type"))
+    obj.__dict__.update(raw)
+    return obj
 
 
 @dataclasses.dataclass
@@ -69,7 +70,9 @@ class GeneralConfig:
     receive_port: int = 9001
 
 
-def parse_config_file(path: Path) -> tuple[GeneralConfig, list[AvatarParameter]]:
+def parse_config_file(
+    path: Path, parameter_templates: dict[str, type[AvatarParameter]]
+) -> tuple[GeneralConfig, list[AvatarParameter]]:
     with path.open("rb") as f:
         parsed = tomllib.load(f)
     if not parsed:
@@ -80,7 +83,12 @@ def parse_config_file(path: Path) -> tuple[GeneralConfig, list[AvatarParameter]]
         if field_name in parsed and type(parsed[field_name]) is type(field_value):
             setattr(config, field_name, parsed[field_name])
 
-    return config, []
+    parameters = []
+    for param_name, param_config in parsed.items():
+        if param_name in parameter_templates:
+            parameters.append(parse_parameter(param_config, parameter_templates[param_name]))
+
+    return config, parameters
 
 
 if __name__ == "__main__":

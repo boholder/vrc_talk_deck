@@ -2,7 +2,7 @@ ip = "127.0.0.1"
 send_port = 9000
 receive_port = 9001
 
-[avatar.parameters.boholder_talk_deck]
+[boholder_talk_deck]
 type = "Int"
 # other than "type", custom data structure for each avatar parameter
 lang = ["zh", "en"]
