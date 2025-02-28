@@ -86,9 +86,10 @@ def test_whole_process(test_server, test_files_dir):
         nonlocal result
         result = (msg, "b", "n") == actual
 
-    mock_server = test_server({"/chatbox/input": check})
+    mock_server = test_server({"/chatbox/input": check}, DEFAULT_PARAMS["send-port"])
+    mock_server.timeout = 10
+
     mock_client.send_message("/avatar/parameters/echo_param", msg)
     server_under_test.handle_request()
-    mock_server.handle_request()
-
+    mock_server.handle_timeout()
     assert result

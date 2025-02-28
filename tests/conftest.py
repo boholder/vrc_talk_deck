@@ -25,13 +25,13 @@ def test_server(assertion_handler):
     def fail_on_address_mismatch(_, __):
         raise AssertionError("address mismatched")
 
-    def built_server(address_assertion_dict: dict[str, Callable[[Any], None]]):
+    def built_server(address_assertion_dict: dict[str, Callable[[Any], None]], bind_port=DEFAULT_PARAMS["send-port"]):
         dispatcher = Dispatcher()
         dispatcher.set_default_handler(fail_on_address_mismatch)
         for address, assertion in address_assertion_dict.items():
             dispatcher.map(address, assertion_handler(assertion))
 
-        return BlockingOSCUDPServer((DEFAULT_PARAMS["ip"], DEFAULT_PARAMS["send-port"]), dispatcher)
+        return BlockingOSCUDPServer((DEFAULT_PARAMS["ip"], bind_port), dispatcher)
 
     return built_server
 
