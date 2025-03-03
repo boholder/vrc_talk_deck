@@ -1,0 +1,52 @@
+ip = "127.0.0.1"
+send_port = 9000
+receive_port = 9001
+
+[boholder_talk_deck]
+type = "Int"
+lang = ["zh", "en"]
+response = [
+    { zh = "你的性格偏向于保守型/变革型? 如果保守,在哪些方面? 如果变革,最想改变什么?", en = "Is your personality conservative or progressive? If conservative, in what way? If progressive, what do you want to change?" },
+    { zh = "如果你能把任何事情作为你的事业，你会做什么?", en = "If you could turn any interest into a career, what wound it be?" },
+    { zh = "你养过宠物吗? 如果有，它是什么样的? 如果没有，你想养什么宠物?", en = "Have you had any pets? What were they like? If you haven't, what kind of pet would you like?" },
+    { zh = "如果时光倒流，你最想回到哪个时代? 为什么?", en = "If time could reverse, which era would you go back to?" },
+    { zh = "讲讲你的第一份工作。", en = "Describe your first job." },
+    { zh = "如果不考虑经济问题，你想长生不老吗? 为什么?", en = "If financial concerns were not a factor, would you want to live forever? Why?" },
+    { zh = "上学时期你最喜欢的学科是什么?", en = "What was your favorite subject in school?" },
+    { zh = "你希望10年后做什么? 为什么?", en = "What do you hope to do in 10 years? Why?" },
+    { zh = "如果你能和任何人共同交谈三小时,你最想和谁聊天? 为什么?", en = "If you could talk to anyone for three hours, who would you most want to talk to? Why?" },
+    { zh = "列出你认为好老板/领导的三种品质，为什么?", en = "List three characteristics of a good boss/leader, and explain why." },
+    { zh = "你如何看待周围的罪恶?", en = "What do you think about the evits around you?" },
+    { zh = "你最喜欢的童话/种话/成语/寓言是什么?", en = "What is your favorite Fairy Tale/Myth/Idiom/Fable?" },
+    { zh = "你会如何回报/感谢你想感谢的人？", en = "How would you give something back / thank the people you would like to thank?" },
+    { zh = "你觉得自己最像什么动物/植物? 为什么?", en = "What animal/plant do you feel yourself most like? Why?" },
+    { zh = "你认为人生中最快乐的事情是什么?", en = "What is the happiest thing in life for you?" },
+    { zh = "你向往的生活是什么样的?", en = "What kind of life do you dream of?" },
+    { zh = "你觉得真正的自由是什么? 你最想在哪方面自由?", en = "What is true freedom? What do you want to be free from?" },
+    { zh = "如果为自己写墓志铭/遗嘱,你会写什么?", en = "If you were to write your own epitaph/will, what would you write?" },
+    { zh = "如果你接下来24小时是自由的，你会做什么？", en = "If you were free for the next 24 hours, what would you do?" },
+    { zh = "你想因什么事出名/被认识?", en = "What do you want to be known/recognized for?" },
+    { zh = "如果你死了，你希望留下什么给身边的人?", en = "If you died, what would you want to leave behind for those around you?" },
+    { zh = "如果你是导演，会拍一部怎样的电影?", en = "If you were a movie director, what kind of movie would you make?" },
+    { zh = "你欣赏的人有什么样的特质?", en = "What traits do you appreciate in a person?" },
+    { zh = "如果可以，你会给过去的自己什么建议?", en = "If you could, what advice would you give your past self?" },
+    { zh = "你觉得融入群体有压力吗? 为什么?", en = "Do you feel pressure when becoming a part of a new group? Why?" },
+    { zh = "你想要有什么超级能力? 为什么?", en = "What superpower would you like to have? Why?" },
+    { zh = "过去的你会怎么看待现在的自己?", en = "What would your past self think of your current self?" },
+    { zh = "你觉得什么样的人生才是精彩的? 为什么?", en = "What is a wonderful life to you? Why?" },
+    { zh = "你觉得什么样的人生是活得有价值的? 为什么?", en = "What is a valuable life to you? Why?" },
+    { zh = "如果你能和任何人交换一天，你会选择谁? 为什么?", en = "If you could swap lives with anyone for a day, who would you choose? Why?" },
+    { zh = "如果退休了，你希望拥有什么爱好?", en = "What hobbies would you want to have after you retired?" },
+    { zh = "在工作之余，你对什么事情充满热情?", en = "What are you passionate about in your spare time?" },
+    { zh = "有哪些事情，你一直想做，但是还没有做? 为什么?", en = "What are the things that you always wanted to do but haven't yet done? Why not?" },
+    { zh = "你做过的最有趣/最糟糕的工作是什么?", en = "What is the best/worst position that you've held in your career?" },
+    { zh = "小时候你最害怕什么? 长大后你最害怕什么?", en = "What was your greatest fear as a child? What is it as an adult?" },
+    { zh = "你在工作中犯过的最大错误是什么? 你是如何处理的?", en = "What is the most serious mistake you made at work? How did you handle it?" },
+    { zh = "你最喜欢的电影/书是什么? 为什么?", en = "What is your favorite movie/book? Why?" },
+    { zh = "最近有没有什么任务/事情让你感到压力很大?", en = "Are there any tasks/issues that are burdensome to you?" },
+    { zh = "最近有什么有意思的旅行吗? 或分享一段难忘的旅行经历?", en = "Are there any interesting travels lately? Or share a memorable travel experience." },
+    { zh = "你想在一生中完成的事情有什么?", en = "What things do you want to accomplish in your lifetime?" },
+    { zh = "你喜欢小孩吗? 希望拥有子女吗? 为什么?", en = "Do you like kids? Do you ever want any? Why?" },
+    { zh = "今天你感觉怎么样?", en = "How has your day been?" },
+    { zh = "你对结婚有什么看法? 为什么?", en = "What is your opinion on being married? Why?" },
+]

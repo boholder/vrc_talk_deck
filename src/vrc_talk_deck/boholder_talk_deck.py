@@ -13,7 +13,13 @@ class BoholderTalkDeck(AvatarParameter):
     questions: dict[int, _Question]
 
     def post_configured_init(self):
-        self.questions = {q["id"]: _Question(q["zh"], len(q["zh"]), q["en"], len(q["en"])) for q in self.response}
+        self.questions = {}
+        for i, r in enumerate(self.response):
+            _id = i
+            if "id" in r:
+                _id = r["id"]
+
+            self.questions[_id] = _Question(r["zh"], len(r["zh"]), r["en"], len(r["en"]))
 
     def __call__(self, request_id: int) -> str:
         q: _Question = self.questions[request_id]
